@@ -199,10 +199,16 @@ struct DocumentPane: View {
             .overlay(alignment: .topLeading) {
                 // Quiet key hint in an empty file; gone with the first letter.
                 if document.text.isEmpty {
-                    Text("⌘T — new lead · ⌘F — search")
+                    // For someone who opens Shpora for the first time: what to do, and the two keys
+                    // worth knowing. No in-house words (it used to say "new lead").
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Just type — it saves by itself.")
+                        Text("⌘T — timestamp · ⌘F — search")
+                    }
                         .font(.system(size: 14))
                         .foregroundStyle(.tertiary)
                         .padding(.leading, 27)
+                        .padding(.trailing, 18)
                         .padding(.top, 5)
                         .allowsHitTesting(false)
                 }

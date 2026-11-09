@@ -6,6 +6,17 @@ A tiny macOS app for quick notes that floats above every window. One hotkey open
 
 ![Two panes: questions on the left, notes on the right](screenshots/split.png)
 
+## Download
+
+1. Download **Shpora-1.0.zip** from [Releases](https://github.com/nagornik-icloud/shpora/releases/latest) and unzip it.
+2. Move **Shpora.app** to **Applications** and open it.
+3. The first time, macOS says it can't verify the developer (the app isn't notarized by Apple yet — see Planned). Click **Done**, then open **System Settings → Privacy & Security**, scroll down and click **Open Anyway** next to Shpora. You only do this once.
+
+   Or in Terminal: `xattr -dr com.apple.quarantine /Applications/Shpora.app`
+4. Press ⌃⌥J.
+
+Works on Apple silicon and Intel Macs with macOS 26 or later.
+
 ## What it does
 
 **The window**
@@ -41,18 +52,17 @@ A tiny macOS app for quick notes that floats above every window. One hotkey open
 - No Markdown rendering: you see and edit the plain text.
 - No sync, accounts or cloud — files live where you put them (put them in iCloud Drive or Dropbox if you want sync).
 - No version history, daily notes or task lists.
-- No ready-made download yet: you build it from source (below).
 - macOS 26 or later only.
 
 ## Planned
 
 - Auto-update (Sparkle).
-- A signed and notarized build to download from Releases, so you don't need Xcode.
+- A build notarized by Apple, so macOS opens it without the extra step.
 - Homebrew install.
 
 Ideas and bug reports are welcome in Issues.
 
-## Build and install
+## Build from source
 
 You need macOS 26+, Xcode and [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`).
 
