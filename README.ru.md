@@ -1,3 +1,5 @@
+<img src="screenshots/icon.png" width="128" alt="Иконка Shpora">
+
 # Shpora
 
 [English](README.md) · **Русский**
@@ -8,7 +10,7 @@
 
 ## Скачать
 
-1. Скачай **Shpora-1.0.zip** со страницы [Releases](https://github.com/nagornik-icloud/shpora/releases/latest) и распакуй.
+1. Скачай свежий **Shpora-….zip** со страницы [Releases](https://github.com/nagornik-icloud/shpora/releases/latest) и распакуй.
 2. Перетащи **Shpora.app** в **Программы** и открой.
 3. В первый раз macOS скажет, что не может проверить разработчика (программа пока не заверена Apple — см. «В планах»). Нажми **Готово**, затем открой **Системные настройки → Конфиденциальность и безопасность**, пролистай вниз и нажми **Всё равно открыть** рядом с Shpora. Это нужно сделать один раз.
 

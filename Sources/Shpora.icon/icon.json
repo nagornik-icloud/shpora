@@ -1,0 +1,16 @@
+{
+  "fill" : {
+    "automatic-gradient" : "extended-srgb:0.98000,0.42000,0.12000,1.00000"
+  },
+  "groups" : [
+    {
+      "layers" : [
+        { "image-name" : "lines.svg", "name" : "lines" },
+        { "image-name" : "paper.svg", "name" : "paper" }
+      ],
+      "shadow" : { "kind" : "neutral", "opacity" : 0.5 },
+      "translucency" : { "enabled" : true, "value" : 0.3 }
+    }
+  ],
+  "supported-platforms" : { "squares" : "shared" }
+}

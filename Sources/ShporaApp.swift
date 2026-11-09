@@ -173,7 +173,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func setupStatusItem() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        statusItem.button?.image = NSImage(systemSymbolName: "note.text", accessibilityDescription: "Shpora")
+        // Own glyph (the folded cheat sheet from the app icon). The asset is marked as a template,
+        // so the menu bar recolours it for light and dark bars by itself.
+        let glyph = NSImage(named: "MenuBarIcon")
+        glyph?.size = NSSize(width: 18, height: 18)
+        glyph?.accessibilityDescription = "Shpora"
+        statusItem.button?.image = glyph
         let menu = NSMenu()
         menu.addItem(withTitle: String(localized: "Show Shpora"), action: #selector(showAction), keyEquivalent: "").target = self
         menu.addItem(withTitle: String(localized: "Settings…"), action: #selector(openSettingsAction), keyEquivalent: "").target = self

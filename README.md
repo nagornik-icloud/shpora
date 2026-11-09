@@ -1,3 +1,5 @@
+<img src="screenshots/icon.png" width="128" alt="Shpora icon">
+
 # Shpora
 
 **English** · [Русский](README.ru.md)
@@ -8,7 +10,7 @@ A tiny macOS app for quick notes that floats above every window. One hotkey open
 
 ## Download
 
-1. Download **Shpora-1.0.zip** from [Releases](https://github.com/nagornik-icloud/shpora/releases/latest) and unzip it.
+1. Download the latest **Shpora-….zip** from [Releases](https://github.com/nagornik-icloud/shpora/releases/latest) and unzip it.
 2. Move **Shpora.app** to **Applications** and open it.
 3. The first time, macOS says it can't verify the developer (the app isn't notarized by Apple yet — see Planned). Click **Done**, then open **System Settings → Privacy & Security**, scroll down and click **Open Anyway** next to Shpora. You only do this once.
 
