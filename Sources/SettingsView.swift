@@ -24,7 +24,7 @@ struct SettingsView: View {
             lookTab.tabItem { Label(String(localized: "Look"), systemImage: "paintbrush") }
             aboutTab.tabItem { Label(String(localized: "About"), systemImage: "info.circle") }
         }
-        .frame(width: 520, height: 470)
+        .frame(width: 600, height: 470)
     }
 
     private var generalTab: some View {
