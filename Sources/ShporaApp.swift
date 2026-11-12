@@ -135,10 +135,35 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             case (24, _): self.model.changeFont(by: 1)                                                            // = and +
             case (27, false): self.model.changeFont(by: -1)                                                       // -
             case (29, false): self.model.fontSize = 17                                                            // 0
-            default: return event
+            default: return self.performEditKey(event.keyCode, shift: cmdShift) ? nil : event
             }
             return nil
         }
+    }
+
+    /// ⌘A/C/V/X/Z/F/G inside the panel. The Edit menu only fires while Shpora is the active app,
+    /// and the panel deliberately never activates it — so without this the text editor had no
+    /// copy/paste at all (owner 12.11.2026). Physical keys, so the Russian layout works too.
+    private func performEditKey(_ keyCode: UInt16, shift: Bool) -> Bool {
+        var findTag: NSFindPanelAction?
+        let action: Selector
+        switch (keyCode, shift) {
+        case (0, false): action = #selector(NSText.selectAll(_:))       // A
+        case (8, false): action = #selector(NSText.copy(_:))            // C
+        case (9, false): action = #selector(NSText.paste(_:))           // V
+        case (7, false): action = #selector(NSText.cut(_:))             // X
+        case (6, false): action = Selector(("undo:"))                   // Z
+        case (6, true):  action = Selector(("redo:"))                   // ⇧Z
+        case (3, false): action = #selector(NSTextView.performFindPanelAction(_:)); findTag = .showFindPanel  // F
+        case (5, false): action = #selector(NSTextView.performFindPanelAction(_:)); findTag = .next          // G
+        case (5, true):  action = #selector(NSTextView.performFindPanelAction(_:)); findTag = .previous      // ⇧G
+        default: return false
+        }
+        // The find bar reads the action kind from the sender's tag, as it would from a menu item.
+        let sender: Any? = findTag.map { tag -> NSMenuItem in let m = NSMenuItem(); m.tag = Int(tag.rawValue); return m }
+        let handled = NSApp.sendAction(action, to: nil, from: sender)
+        log.debug("edit key \(keyCode) shift=\(shift) handled=\(handled)")
+        return handled
     }
 
     private func buildMainMenu() {

@@ -31,6 +31,12 @@ enum TestHooks {
                     let ok = NSApp.windows.contains { $0.isVisible && $0.isKeyWindow }
                     try? (ok ? "1" : "0").write(toFile: NSTemporaryDirectory() + "shpora-keystate", atomically: true, encoding: .utf8)
                 case "backdrop": showBackdrop(behind: window.panel, light: arg == "light")
+                // Site screenshots (09.11.2026): light or dark window look without touching the
+                // owner's system appearance setting. Debug build only.
+                case "appearance": NSApp.appearance = NSAppearance(named: arg == "dark" ? .darkAqua : .aqua)
+                case "frame":
+                    let v = arg.split(separator: ",").compactMap { Double($0) }
+                    if v.count == 4 { window.panel.setFrame(NSRect(x: v[0], y: v[1], width: v[2], height: v[3]), display: true) }
                 default: break
                 }
             }
