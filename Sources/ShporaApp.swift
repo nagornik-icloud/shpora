@@ -109,7 +109,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             if event.keyCode == 53, mods.isEmpty {   // Esc
                 // Esc first closes what is open inside the window (find bar); only then hides it,
                 // so a reflex Esc mid-call doesn't make the notes vanish.
-                if let tv = event.window?.firstResponder as? NSTextView,
+                // The keyboard is usually in the find field itself, so look up the note behind it.
+                if let tv = self.noteTextView(in: self.window.panel),
                    let scroll = tv.enclosingScrollView, scroll.isFindBarVisible {
                     scroll.isFindBarVisible = false
                     event.window?.makeFirstResponder(tv)
@@ -161,9 +162,29 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         // The find bar reads the action kind from the sender's tag, as it would from a menu item.
         let sender: Any? = findTag.map { tag -> NSMenuItem in let m = NSMenuItem(); m.tag = Int(tag.rawValue); return m }
-        let handled = NSApp.sendAction(action, to: nil, from: sender)
+        // After ⌘F the keyboard sits in the find bar's own field; ⌘G sent there finds nothing, so
+        // find actions go to the note's text view behind it.
+        let target: Any? = findTag == nil ? nil : noteTextView(in: window.panel)
+        let handled = NSApp.sendAction(action, to: target, from: sender)
         log.debug("edit key \(keyCode) shift=\(shift) handled=\(handled)")
         return handled
+    }
+
+    /// The note editor that owns the keyboard, even when the keyboard is in its find bar field.
+    /// The find bar field is not inside the note's scroll view in the view tree, so it is matched
+    /// through each scroll view's find bar (there are two notes when the split is open).
+    func noteTextView(in window: NSWindow) -> NSTextView? {
+        guard let tv = window.firstResponder as? NSTextView else { return nil }
+        guard tv.isFieldEditor else { return tv }
+        guard let field = tv.delegate as? NSView, let root = window.contentView else { return nil }
+        var stack: [NSView] = [root]
+        while let v = stack.popLast() {
+            if let sv = v as? NSScrollView, let bar = sv.findBarView, field.isDescendant(of: bar) {
+                return sv.documentView as? NSTextView
+            }
+            stack.append(contentsOf: v.subviews)
+        }
+        return nil
     }
 
     private func buildMainMenu() {
