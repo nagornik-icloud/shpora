@@ -31,6 +31,9 @@ enum TestHooks {
                     let ok = NSApp.windows.contains { $0.isVisible && $0.isKeyWindow }
                     try? (ok ? "1" : "0").write(toFile: NSTemporaryDirectory() + "shpora-keystate", atomically: true, encoding: .utf8)
                 case "backdrop": showBackdrop(behind: window.panel, light: arg == "light")
+                // Site screenshots (13.11.2026): "path|x,y,w,h" — a picture in Shpora's own window right
+                // under the panel, so the glass refracts a known scene and nothing of the owner's screen.
+                case "backdropimg": showImageBackdrop(behind: window.panel, spec: arg)
                 // Site screenshots (09.11.2026): light or dark window look without touching the
                 // owner's system appearance setting. Debug build only.
                 case "appearance": NSApp.appearance = NSAppearance(named: arg == "dark" ? .darkAqua : .aqua)
@@ -72,6 +75,26 @@ enum TestHooks {
     }
     w.contentView = v
     w.order(.below, relativeTo: panel.windowNumber)
+    backdropWindow = w
+}
+
+@MainActor private func showImageBackdrop(behind panel: NSPanel, spec: String) {
+    backdropWindow?.orderOut(nil)
+    let parts = spec.split(separator: "|", maxSplits: 1).map(String.init)
+    guard parts.count == 2, let img = NSImage(contentsOfFile: parts[0]) else { return }
+    let v = parts[1].split(separator: ",").compactMap { Double($0) }
+    guard v.count == 4 else { return }
+    let frame = NSRect(x: v[0], y: v[1], width: v[2], height: v[3])
+    let w = NSWindow(contentRect: frame, styleMask: .borderless, backing: .buffered, defer: false)
+    w.level = .normal
+    w.isReleasedWhenClosed = false
+    w.hasShadow = false
+    let iv = NSImageView(frame: NSRect(origin: .zero, size: frame.size))
+    iv.image = img
+    iv.imageScaling = .scaleAxesIndependently
+    w.contentView = iv
+    w.orderFrontRegardless()
+    panel.orderFrontRegardless()
     backdropWindow = w
 }
 
